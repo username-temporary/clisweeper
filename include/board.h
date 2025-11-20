@@ -3,14 +3,16 @@
 
 #pragma once
 
+#define MAX_WIDTH 100;
+#define MAX_HEIGHT 100;
+
 typedef enum {
-  MINE,
-  TILE
+  MINE, TILE
 } Tile_Type;
 
 typedef struct {
   int x;
-  int y
+  int y; 
 } Position;
 
 typedef struct {
@@ -21,6 +23,8 @@ typedef struct {
   bool revealed; // For printing purposes
 } Tile;
 
-typedef Tile* Board;
+typedef Tile** Board;
 
 Board board_create(int width, int height, int mines, Position init_pos);
+
+void board_fill(Board board, int width, int height, int mines, Position init_pos);
