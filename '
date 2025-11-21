@@ -50,7 +50,7 @@ void board_fill(Board board) {
   for (int i = 0; i < board.mines; i ++) {
     Position pos = double_index(index_array[i], board.width);
     if (pos.x == board.first_pos.x && pos.y == board.first_pos.y) {
-      update_value(board, double_index(index_array[board.mines], board.width));
+      update_value(board, double_index(index_array[board.mines+1], board.width));
       continue;
     }
     board.tiles[pos.x][pos.y].type= MINE ;
