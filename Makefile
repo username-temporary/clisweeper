@@ -1,9 +1,10 @@
-
+#variables
+easy=10 10 9
 #shortcuts
 all: game board_test board.o board_print.o
 
 run: game
-	./game
+	./game $(easy)
 
 tests: board_test
 	./board_test

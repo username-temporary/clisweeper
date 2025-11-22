@@ -4,21 +4,59 @@
 #include "../include/board.h"
 #include "../include/board_print.h"
 
+void print_line(char middle,char edge, int lenght){
+  printf("   ");
+  printf("%c",edge);
+    for (int j=0; j<lenght*2-1;j++)printf("%c",middle);
+  printf("%c\n",edge);
+}
 void print_board(Board board) {
+  char empty = ' ';
+  char bomb = 'X';
+  char flag = 'F';
+  char horizontal_line='-';
+  char vertical_line='|';
+  char corners='+';
+ //printing frist line of numbers
+ printf("   ");
+  for (int i=0;i<board.width;i++){
+    if (i<9){
+    printf(" %d",i+1);
+    }
+    else{
+      printf("%d",i+1);
+    }
+  }
+  printf("\n");
+
+  print_line(horizontal_line,corners,board.width);
+  
+  //board itself
   for (int i = 0; i < board.height; i++) {
+    if (i<9){
+    printf("  %d",i+1);
+    }
+    else if(i<99){
+      printf (" %d",i+1);
+    }
+    else{
+      printf("%d",i+1);
+    }
+
     for (int j = 0; j < board.width; j++) {
       if (!board.tiles[j][i].cleared) 
-        printf("| ");        
+        printf("%c%c",vertical_line,empty);        
       else 
         if (board.tiles[j][i].flag)
-          printf("|F");
+          printf("%c%c",vertical_line,flag);
         else
-          printf("|%d", board.tiles[j][i].value);
+          printf("%c%d",vertical_line, board.tiles[j][i].value);
     }
-    printf("|\n|");
-    for (int j=0; j<board.width*2-1;j++)printf("-");
-    printf("|\n");
+    printf("%c\n",vertical_line);
+    if (i!=board.height-1)print_line(horizontal_line,vertical_line,board.width);
   }
+  //final line
+  print_line(horizontal_line,corners,board.width);
   return;
 }
 
