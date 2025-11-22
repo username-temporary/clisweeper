@@ -7,7 +7,7 @@
 
 #define MAX_WIDTH 100
 #define MAX_HEIGHT 100
-
+//test
 bool consume_rest_of_line(void) {
   int has_extra_char=false; 
   int ch;
