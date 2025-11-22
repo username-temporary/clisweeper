@@ -33,6 +33,7 @@ void print_board(Board board) {
   
   //board itself
   for (int i = 0; i < board.height; i++) {
+    //printing vertical numbers
     if (i<9){
     printf("  %d",i+1);
     }
@@ -44,13 +45,20 @@ void print_board(Board board) {
     }
 
     for (int j = 0; j < board.width; j++) {
-      if (!board.tiles[j][i].cleared) 
+//      printf("%d",(int)board.tiles[j][i].flag);
+      if(board.tiles[j][i].flag){
+         // printf("were'in"); 
+        printf("%c%c",vertical_line,flag);
+      }
+      else if (!board.tiles[j][i].cleared) 
         printf("%c%c",vertical_line,empty);        
-      else 
-        if (board.tiles[j][i].flag)
-          printf("%c%c",vertical_line,flag);
-        else
-          printf("%c%d",vertical_line, board.tiles[j][i].value);
+      else if(board.tiles[j][i].flag){
+         // printf("were'in"); 
+        printf("%c%c",vertical_line,flag);
+      }
+      else{
+        printf("%c%d",vertical_line, board.tiles[j][i].value);
+      }
     }
     printf("%c\n",vertical_line);
     if (i!=board.height-1)print_line(horizontal_line,vertical_line,board.width);

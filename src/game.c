@@ -17,7 +17,29 @@ bool consume_rest_of_line(void) {
   return has_extra_char;
 }
 
-
+void command_translator(char input,Board board,Position tile){
+  switch (input){
+    case 'c': 
+        clear_tile(board,tile);
+        break;
+    case 'f':
+        //should probably moved to a function in board.c
+        if(!board.tiles[tile.x][tile.y].cleared){
+        board.tiles[tile.x][tile.y].flag=true;
+        }
+        else{ printf("this tile is already cleared it cannot be flagged");
+        }
+        break;
+    case 'u':
+        //should probably moved to a function in board.c
+        if(!board.tiles[tile.x][tile.y].flag){
+        board.tiles[tile.x][tile.y].flag=false;
+        }
+        else{ printf("this tile is not flagged it cannot be unflagged");
+        }
+        break;
+  }
+}
 // User enters width, height and number of mines 
 int main(int argc, char* argv[]) {
   
@@ -62,12 +84,12 @@ int main(int argc, char* argv[]) {
   // User input is 1 initialised while the tile array is 0 initialised
   pos.x--;
   pos.y--;
+ 
   board.first_pos = pos;
   board_fill(board);
-
-  // We clear the first tile since it will not be a mine
-  
-  clear_tile(board, pos);
+ 
+  command_translator(command,board,pos);
+  printf("%d",(int)board.tiles[pos.x][pos.y].flag);
   print_board(board);
 
   return 0;
