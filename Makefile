@@ -1,12 +1,15 @@
 
 #shortcuts
-all: board_test board.o board_print.o
+all: game board_test board.o board_print.o
 
-run:all
+run: game
+	./game
+
+tests: board_test
 	./board_test
 
 clean : 
-	rm *.o board_test
+	rm *.o board_test game
 #object files: 
 	#src
 board.o:src/board.c
@@ -14,11 +17,17 @@ board.o:src/board.c
 	
 board_print.o:src/board_print.c
 	gcc -c src/board_print.c
+
+game.o:src/game.c
+	gcc -c src/game.c
 	#test
 board_test.o:tests/board_test.c
 	gcc -c tests/board_test.c
 
 #executable
+game: game.o board.o board_print.o
+	gcc -o game game.o board.o board_print.o
+
 board_test:board_test.o board.o board_print.o
 	gcc -o board_test board.o board_print.o board_test.o
 

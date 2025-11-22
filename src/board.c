@@ -9,6 +9,7 @@ static int single_index(int x, int y, int max) {
 }
 
 static Position double_index(int n, int max) {
+
   Position pos;
   pos.x = n % max;
   pos.y = n/max;
@@ -30,11 +31,29 @@ static void update_value(Board board, Position pos) {
   if (pos.x+1<board.width)  board.tiles[pos.x+1][pos.y].value++;
   if (pos.y>0) board.tiles[pos.x][pos.y-1].value++;
   if (pos.x>0) board.tiles[pos.x-1][pos.y].value++;
+  // Corners
   if (pos.x != 0 && pos.y != 0) board.tiles[pos.x-1][pos.y-1].value++;
   if (pos.x != 0 && pos.y+1 < board.height) board.tiles[pos.x-1][pos.y+1].value++;
   if (pos.x != board.width-1 && pos.y+1 < board.height) board.tiles[pos.x+1][pos.y+1].value++;
   if (pos.x != board.width-1 && pos.y != 0) board.tiles[pos.x+1][pos.y-1].value++;
   return; 
+}
+
+void clear_tile(Board board, Position pos) {
+  board.tiles[pos.x][pos.y].cleared = true;
+  if (board.tiles[pos.x][pos.y].value == 0) {
+
+    if (pos.y+1<board.height && !board.tiles[pos.x][pos.y+1].cleared) clear_tile(board, board.tiles[pos.x][pos.y+1].pos);
+    if (pos.x+1<board.width && !board.tiles[pos.x+1][pos.y].cleared) clear_tile(board, board.tiles[pos.x+1][pos.y].pos);
+    if (pos.y>0 && !board.tiles[pos.x][pos.y-1].cleared) clear_tile(board, board.tiles[pos.x][pos.y-1].pos);
+    if (pos.x>0 && !board.tiles[pos.x-1][pos.y].cleared) clear_tile(board, board.tiles[pos.x-1][pos.y].pos);
+    // Corners
+    if (pos.x!=0 && pos.y!=0 && !board.tiles[pos.x-1][pos.y-1].cleared) clear_tile(board, board.tiles[pos.x-1][pos.y-1].pos);
+    if (pos.x!=0 && pos.y!=board.height-1 && !board.tiles[pos.x-1][pos.y+1].cleared) clear_tile(board, board.tiles[pos.x-1][pos.y+1].pos);
+    if (pos.x!=board.width-1 && pos.y!=board.height-1 && !board.tiles[pos.x+1][pos.y+1].cleared) clear_tile(board, board.tiles[pos.x+1][pos.y+1].pos);
+    if (pos.x!=board.width-1 && pos.y!=0 && !board.tiles[pos.x+1][pos.y-1].cleared) clear_tile(board, board.tiles[pos.x+1][pos.y-1].pos);
+    
+  }
 }
 
 void board_fill(Board board) {
@@ -49,19 +68,15 @@ void board_fill(Board board) {
   // Fill up the board with mines and update the surrounding tiles
   for (int i = 0; i < board.mines; i ++) {
     Position pos = double_index(index_array[i], board.width);
-    if (pos.x == board.first_pos.x && pos.y == board.first_pos.y) {
+    if (pos.x == board.first_pos.x && pos.y == board.first_pos.y) 
       pos = double_index(index_array[board.mines], board.width);
-      board.tiles[pos.x][pos.y].type = MINE;
-      update_value(board, pos);
-      continue;
-    }
     board.tiles[pos.x][pos.y].type= MINE ;
     update_value(board, pos);
   } 
   return;
 }
 
-Board board_create(int width, int height, int mines, Position init_pos) {
+Board board_create(int width, int height, int mines) {
   Board board;
   board.tiles = malloc(width*sizeof(Tile*));
 
@@ -72,8 +87,8 @@ Board board_create(int width, int height, int mines, Position init_pos) {
     for (int j = 0; j < height; j++) {
       Tile curr_tile = board.tiles[i][j];
       curr_tile.type = 1;
-      curr_tile.pos.x = i+1;
-      curr_tile.pos.y = j+1;
+      curr_tile.pos.x = i;
+      curr_tile.pos.y = j;
       curr_tile.value = 0;
       curr_tile.flag = false;
       curr_tile.cleared = false;
@@ -83,6 +98,12 @@ Board board_create(int width, int height, int mines, Position init_pos) {
   board.width = width;
   board.height = height;
   board.mines = mines;
-  board.first_pos = init_pos;
   return board;
 }
+
+bool check_command(Board board, char command, Position pos) {
+  return ((command == 'c' || command == 'f' || command == 'u')
+         && (pos.x > 0 && pos.x <= board.width && pos.y > 0 && pos.y <= board.height));
+}
+
+

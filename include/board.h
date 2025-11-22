@@ -3,9 +3,6 @@
 
 #pragma once
 
-#define MAX_WIDTH 100;
-#define MAX_HEIGHT 100;
-
 typedef enum {
   MINE, TILE
 } Tile_Type;
@@ -31,6 +28,10 @@ typedef struct {
   Position first_pos; // The player's first played tile
 } Board;
 
-Board board_create(int width, int height, int mines, Position init_pos);
+Board board_create(int width, int height, int mines);
 
 void board_fill(Board board);
+
+bool check_command(Board board, char command, Position pos);
+
+void clear_tile(Board board, Position pos);

@@ -9,10 +9,11 @@ int main(void){
   pos.y = 7;
   int width = 10;
   int height = 10;
-  int mines = 67;
-  Board board = board_create(width, height, mines, pos);
+  int mines = 99;
+  Board board = board_create(width, height, mines);
   printf("before fill\n");
   print_board(board);
+  board.first_pos = pos;
   board_fill(board);
   printf("after fill\n");
   print_board(board);
