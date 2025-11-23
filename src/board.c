@@ -27,6 +27,10 @@ static void shuffle (int* array, int size) {
 }
 
 static void update_value(Board board, Position pos) {
+  for (int dx = (pos.x > 0 ? -1 : 0); dx <= (pos.x<board.width-1 ? 1 : 0); dx++) 
+    for (int dy = (pos.y > 0 ? -1 : 0); dy <= (pos.y<board.height-1 ? 1 : 0); dy++) 
+      if (dx != 0 || dy != 0) board.tiles[pos.x+dx][pos.y+dy].value++;
+  /*
   if (pos.y+1<board.height) board.tiles[pos.x][pos.y+1].value++;
   if (pos.x+1<board.width)  board.tiles[pos.x+1][pos.y].value++;
   if (pos.y>0) board.tiles[pos.x][pos.y-1].value++;
@@ -36,13 +40,19 @@ static void update_value(Board board, Position pos) {
   if (pos.x != 0 && pos.y+1 < board.height) board.tiles[pos.x-1][pos.y+1].value++;
   if (pos.x != board.width-1 && pos.y+1 < board.height) board.tiles[pos.x+1][pos.y+1].value++;
   if (pos.x != board.width-1 && pos.y != 0) board.tiles[pos.x+1][pos.y-1].value++;
+  */
   return; 
 }
 
 void clear_tile(Board board, Position pos) {
   board.tiles[pos.x][pos.y].cleared = true;
   if (board.tiles[pos.x][pos.y].value == 0) {
-
+    for (int dx = (pos.x > 0 ? -1 : 0); dx <= (pos.x<board.width-1 ? 1 : 0); dx++) 
+      for (int dy = (pos.y > 0 ? -1 : 0); dy <= (pos.y<board.height-1 ? 1 : 0); dy++) 
+        if ((dx != 0 || dy != 0) && !board.tiles[pos.x+dx][pos.y+dy].cleared) 
+          clear_tile(board, board.tiles[pos.x+dx][pos.y+dy].pos);
+    
+    /*
     if (pos.y+1<board.height && !board.tiles[pos.x][pos.y+1].cleared) clear_tile(board, board.tiles[pos.x][pos.y+1].pos);
     if (pos.x+1<board.width && !board.tiles[pos.x+1][pos.y].cleared) clear_tile(board, board.tiles[pos.x+1][pos.y].pos);
     if (pos.y>0 && !board.tiles[pos.x][pos.y-1].cleared) clear_tile(board, board.tiles[pos.x][pos.y-1].pos);
@@ -52,8 +62,9 @@ void clear_tile(Board board, Position pos) {
     if (pos.x!=0 && pos.y!=board.height-1 && !board.tiles[pos.x-1][pos.y+1].cleared) clear_tile(board, board.tiles[pos.x-1][pos.y+1].pos);
     if (pos.x!=board.width-1 && pos.y!=board.height-1 && !board.tiles[pos.x+1][pos.y+1].cleared) clear_tile(board, board.tiles[pos.x+1][pos.y+1].pos);
     if (pos.x!=board.width-1 && pos.y!=0 && !board.tiles[pos.x+1][pos.y-1].cleared) clear_tile(board, board.tiles[pos.x+1][pos.y-1].pos);
-    
+    */
   }
+  return;
 }
 
 void board_fill(Board board) {
