@@ -17,5 +17,6 @@ int main(void){
   board_fill(board);
   printf("after fill\n");
   print_board(board);
+  board_destroy(board);
 }
 

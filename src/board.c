@@ -116,4 +116,10 @@ bool check_command(Board board, char command, Position pos) {
          && (pos.x > 0 && pos.x <= board.width && pos.y > 0 && pos.y <= board.height));
 }
 
+void board_destroy(Board board) {
+  for (int i = 0; i < board.width; i++)
+    free(board.tiles[i]);
+  free(board.tiles);
+  return;
+}
 

@@ -35,3 +35,5 @@ void board_fill(Board board);
 bool check_command(Board board, char command, Position pos);
 
 void clear_tile(Board board, Position pos);
+
+void board_destroy(Board board);

@@ -91,5 +91,7 @@ int main(int argc, char* argv[]) {
   command_translator(command,board,pos);
   print_board(board);
 
+
+  board_destroy(board);
   return 0;
 }
