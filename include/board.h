@@ -26,8 +26,8 @@ typedef struct {
   int height; // Board's height
   int mines; // Number of total mines in board
   Position first_pos; // The player's first played tile
-  int cleared_tiles;
-  bool lost;
+  int* cleared_tiles;
+  bool* lost;
 } Board;
 
 Board board_create(int width, int height, int mines);

@@ -27,13 +27,13 @@ void command_translator(char input,Board board,Position pos){
 }
 void clear_tile(Board board, Position pos) {
   if (board.tiles[pos.x][pos.y].type == MINE) {
-    board.lost = true;
+    *board.lost = true;
     return;
   }
 
   if (!board.tiles[pos.x][pos.y].cleared) {
   board.tiles[pos.x][pos.y].cleared = true;
-  board.cleared_tiles++;
+  (*board.cleared_tiles)++;
   if (board.tiles[pos.x][pos.y].value == 0) 
     for (int dx = (pos.x > 0 ? -1 : 0); dx <= (pos.x<board.width-1 ? 1 : 0); dx++) 
       for (int dy = (pos.y > 0 ? -1 : 0); dy <= (pos.y<board.height-1 ? 1 : 0); dy++) 

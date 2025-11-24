@@ -71,16 +71,14 @@ int main(int argc, char* argv[]) {
       first_round = false;
     }
     command_translator(command,board,pos);
+    if (*board.lost == true) {
+      printf("Dumbahh\n");
+      break;
+    }
     print_board(board);
-    int c = 0;
-    for (int i = 0; i < board.width; i++)
-      for (int j = 0; j < board.height; j++)
-        if (!board.tiles[i][j].cleared) c++;
-
-    printf("%d\n", c);
-    if (c == board.mines) {
+    if ((*board.cleared_tiles + board.mines) == board.width*board.height) {
       win = true;
-      printf("Good job!!!\n");
+      printf("You did something\n");
     }
   }
 

@@ -74,8 +74,10 @@ Board board_create(int width, int height, int mines) {
   board.width = width;
   board.height = height;
   board.mines = mines;
-  board.cleared_tiles = 0;
-  board.lost = false;
+  board.cleared_tiles = malloc(sizeof(int));
+  *board.cleared_tiles = 0;
+  board.lost = malloc(sizeof(bool));
+  *board.lost = false;
   return board;
 }
 
@@ -83,6 +85,8 @@ void board_destroy(Board board) {
   for (int i = 0; i < board.width; i++)
     free(board.tiles[i]);
   free(board.tiles);
+  free(board.cleared_tiles);
+  free(board.lost);
   return;
 }
 
