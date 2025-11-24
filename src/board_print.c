@@ -23,7 +23,7 @@ void print_board(Board board) {
  // to avoid long numbers that make the baord unreadable we will print the second digit of the number above it 
  const int number_offset=19;
  // number offset represents how many spaces we need to go from 1- 10 with the gaps between numbers accounted for  
- if (board.width>10){
+ if (board.width>9){
     printf("  ");//offset to align the first digit with the board 
     for (int i= 0;i<board.width/10;i++){
         for (int j=0;j< number_offset;j++)
@@ -42,8 +42,9 @@ void print_board(Board board) {
 
   print_line(horizontal_line,corners,board.width);
   
-  //board itself
-  for (int i = 0; i < board.height; i++) {
+  //board itself             base          cyan1         green2         red3      blue4         red5         cyan6        purple 7     white 8    red flag 
+ const char* color_array[]={"\033[0;37m","\033[0;36m","\033[0;32m","\033[0;31m","\033[0;34m","\033[0;31m","\033[0;36m","\033[0;35m","\033[0;37m","\033[0;31m"};
+ for (int i = 0; i < board.height; i++) {
     //printing vertical numbers
     if (i<9)
       printf("  %d",i+1);
@@ -57,21 +58,30 @@ void print_board(Board board) {
         printf("%c%c", vertical_line, bomb);
         continue; 
       }
-      if(board.tiles[j][i].flag)
-        printf("%c%c",vertical_line,flag); 
+      if(board.tiles[j][i].flag){
+        //changing to falg color
+        printf("%c%s",vertical_line,color_array[9]);
+        printf("%c",flag); 
+        printf("%s",color_array[0]);
+      }
       else if (!board.tiles[j][i].cleared) 
         printf("%c%c",vertical_line,empty);        
-      else
-        printf("%c%d",vertical_line, board.tiles[j][i].value);
+      else{
+        //changing color to the one associated with the nubmer
+        printf("%c%s",vertical_line,color_array[board.tiles[j][i].value]);
+        printf("%d", board.tiles[j][i].value);
+        //resetting back to base color
+        printf("%s",color_array[0]);
+      }
     }
     
 
     printf("%c\n",vertical_line);
     if (i!=board.height-1)print_line(horizontal_line,vertical_line,board.width);
-  }
-  //final line
-  print_line(horizontal_line,corners,board.width);
-  return;
+ }
+ //final line
+ print_line(horizontal_line,corners,board.width);
+ return;
 }
 
 
