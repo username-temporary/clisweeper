@@ -34,22 +34,6 @@ static void update_value(Board board, Position pos) {
   return; 
 }
 
-void clear_tile(Board board, Position pos) {
-  if (!board.tiles[pos.x][pos.y].cleared) {
-  board.tiles[pos.x][pos.y].cleared = true;
-  if (board.tiles[pos.x][pos.y].value == 0) 
-    for (int dx = (pos.x > 0 ? -1 : 0); dx <= (pos.x<board.width-1 ? 1 : 0); dx++) 
-      for (int dy = (pos.y > 0 ? -1 : 0); dy <= (pos.y<board.height-1 ? 1 : 0); dy++) 
-        if ((dx != 0 || dy != 0) && !board.tiles[pos.x+dx][pos.y+dy].cleared) 
-          clear_tile(board, board.tiles[pos.x+dx][pos.y+dy].pos);
-  }
-  else {
-    int flags = 0;
-    // Check if adjacent flagged tiles are mines 
-  }
-  return;
-}
-
 void board_fill(Board board) {
   // Initialize an array with indexes and shuffle it to pick random spots for mines
   int index_array[board.width * board.height];
@@ -90,12 +74,9 @@ Board board_create(int width, int height, int mines) {
   board.width = width;
   board.height = height;
   board.mines = mines;
+  board.cleared_tiles = 0;
+  board.lost = false;
   return board;
-}
-
-bool check_command(Board board, char command, Position pos) {
-  return ((command == 'c' || command == 'f' || command == 'u')
-         && (pos.x > 0 && pos.x <= board.width && pos.y > 0 && pos.y <= board.height));
 }
 
 void board_destroy(Board board) {

@@ -1,13 +1,16 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <time.h>
 
 #include "../include/board.h"
 #include "../include/board_print.h"
+#include "../include/commands.h"
 
 #define MAX_WIDTH 100
 #define MAX_HEIGHT 100
-//test
+
+
 static bool consume_rest_of_line(void) {
   int has_extra_char=false; 
   int ch;
@@ -17,32 +20,9 @@ static bool consume_rest_of_line(void) {
   return has_extra_char;
 }
 
-void command_translator(char input,Board board,Position tile){
-  switch (input){
-    case 'c': 
-        clear_tile(board,tile);
-        break;
-    case 'f':
-        //should probably moved to a function in board.c
-        if(!board.tiles[tile.x][tile.y].cleared){
-        board.tiles[tile.x][tile.y].flag=true;
-        }
-        else{ printf("this tile is already cleared it cannot be flagged");
-        }
-        break;
-    case 'u':
-        //should probably moved to a function in board.c
-        if(!board.tiles[tile.x][tile.y].flag){
-        board.tiles[tile.x][tile.y].flag=false;
-        }
-        else{ printf("this tile is not flagged it cannot be unflagged");
-        }
-        break;
-  }
-}
 // User enters width, height and number of mines 
 int main(int argc, char* argv[]) {
-  
+  srand(time(NULL));
   if (argc != 4) {
     printf("Enter board's dimensions(width, height) and number of mines\n");
     return 1;
@@ -65,32 +45,44 @@ int main(int argc, char* argv[]) {
     return 1;
   }
 
+  bool win = false;
   Board board = board_create(width, height, mines);
   print_board(board);  
 
   //in c scanf will get triggered automatically so long as stdin has characterss left, leading to weird behavior when the user inputs unexpected values, to combat this thie "confume rest of line"function practically delets the remaining input after the "first"scanf but that means that commands with garbage after the correct command (ex: c 2 1 asolidfasjflisjfsjij) would be valid, so consume_rest_of_line will return 1 if it actually has to consume somehting and then store it to has_extra_char.
-  bool has_extra_char=false;
+  bool first_round = true;
+  bool has_extra_char;
   char command;
   Position pos;
-  int first = scanf("%c %d %d", &command, &pos.x, &pos.y);
-  has_extra_char = consume_rest_of_line();
-  while (has_extra_char||first != 3 || !check_command(board, command, pos)) {
-    printf("Invalid command\n");
-    print_command_list();
-    first = scanf("%c %d %d", &command, &pos.x, &pos.y);
-    has_extra_char=consume_rest_of_line();
+  while (!win) {
+    int input = scanf("%c %d %d", &command, &pos.x, &pos.y);
+    has_extra_char = consume_rest_of_line();
+    while (has_extra_char||input != 3 || !check_command(board, command, pos)) {
+      printf("Invalid command\n");
+      print_command_list();
+      input = scanf("%c %d %d", &command, &pos.x, &pos.y);
+      has_extra_char=consume_rest_of_line();
+    }
+    pos.x--;
+    pos.y--;
+    if (first_round) {
+      board.first_pos = pos; 
+      board_fill(board);
+      first_round = false;
+    }
+    command_translator(command,board,pos);
+    print_board(board);
+    int c = 0;
+    for (int i = 0; i < board.width; i++)
+      for (int j = 0; j < board.height; j++)
+        if (!board.tiles[i][j].cleared) c++;
+
+    printf("%d\n", c);
+    if (c == board.mines) {
+      win = true;
+      printf("Good job!!!\n");
+    }
   }
-
-  // User input is 1 initialised while the tile array is 0 initialised
-  pos.x--;
-  pos.y--;
- 
-  board.first_pos = pos;
-  board_fill(board);
- 
-  command_translator(command,board,pos);
-  print_board(board);
-
 
   board_destroy(board);
   return 0;

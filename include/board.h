@@ -26,13 +26,13 @@ typedef struct {
   int height; // Board's height
   int mines; // Number of total mines in board
   Position first_pos; // The player's first played tile
+  int cleared_tiles;
+  bool lost;
 } Board;
 
 Board board_create(int width, int height, int mines);
 
 void board_fill(Board board);
-
-bool check_command(Board board, char command, Position pos);
 
 void clear_tile(Board board, Position pos);
 
