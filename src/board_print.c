@@ -23,7 +23,7 @@ void print_board(Board board) {
  // to avoid long numbers that make the baord unreadable we will print the second digit of the number above it 
  const int number_offset=19;
  // number offset represents how many spaces we need to go from 1- 10 with the gaps between numbers accounted for  
- if (board.width>9){
+ if (board.width>10){
     printf("  ");//offset to align the first digit with the board 
     for (int i= 0;i<board.width/10;i++){
         for (int j=0;j< number_offset;j++)
@@ -36,7 +36,7 @@ void print_board(Board board) {
  //printing the line of numbers that denotes the first digit of the bombs horizontal position
  printf("   ");
   for (int i=0;i<board.width;i++){
-    printf(" %d",(i+1)%10);
+    printf(" %d",board.width==10?i+1:(i+1)%10);
   }
   printf("\n");
 
