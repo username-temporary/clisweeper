@@ -26,6 +26,10 @@ void command_translator(char input,Board board,Position pos){
   }
 }
 void clear_tile(Board board, Position pos) {
+  if (board.tiles[pos.x][pos.y].flag){
+    printf("this tile is flagged, unflagg it if you would like to clear it \n");
+    return;
+  }
   if (board.tiles[pos.x][pos.y].type == MINE) {
     *board.lost = true;
     return;

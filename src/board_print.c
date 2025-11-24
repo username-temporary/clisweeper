@@ -17,15 +17,26 @@ void print_board(Board board) {
   char horizontal_line='-';
   char vertical_line='|';
   char corners='+';
- //printing frist line of numbers
+ //printing the horizontal line of numbers over the board 
+
+
+ // to avoid long numbers that make the baord unreadable we will print the second digit of the number above it 
+ const int number_offset=19;
+ // number offset represents how many spaces we need to go from 1- 10 with the gaps between numbers accounted for  
+ if (board.width>10){
+    printf("  ");//offset to align the first digit with the board 
+    for (int i= 0;i<board.width/10;i++){
+        for (int j=0;j< number_offset;j++)
+          printf(" ");
+      
+      printf("%d",(i+1));
+    }
+    printf("\n");
+ }
+ //printing the line of numbers that denotes the first digit of the bombs horizontal position
  printf("   ");
   for (int i=0;i<board.width;i++){
-    if (i<9){
-    printf(" %d",i+1);
-    }
-    else{
-      printf("%d",i+1);
-    }
+    printf(" %d",(i+1)%10);
   }
   printf("\n");
 
