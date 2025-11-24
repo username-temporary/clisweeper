@@ -42,8 +42,10 @@ void print_board(Board board) {
 
   print_line(horizontal_line,corners,board.width);
   
-  //board itself             base          cyan1         green2         red3      blue4         red5         cyan6        purple 7     white 8    red flag 
- const char* color_array[]={"\033[0;37m","\033[0;36m","\033[0;32m","\033[0;31m","\033[0;34m","\033[0;31m","\033[0;36m","\033[0;35m","\033[0;37m","\033[0;31m"};
+  //board itself             base          cyan1         green2         red3      blue4         red5         cyan6        purple 7     white 8    red flag         mines 
+ const char* color_array[]={"\033[0;39m","\033[0;34m","\033[0;32m","\033[0;91m","\033[0;94m","\033[0;31m","\033[0;96m","\033[0;35m","\033[0;37m","\033[0;31m","\033[0;90m"};
+
+ 
  for (int i = 0; i < board.height; i++) {
     //printing vertical numbers
     if (i<9)
@@ -55,7 +57,9 @@ void print_board(Board board) {
 
     for (int j = 0; j < board.width; j++) {
       if (*board.lost && board.tiles[j][i].type == MINE) { 
-        printf("%c%c", vertical_line, bomb);
+        printf("%c%s",vertical_line,color_array[10]);
+        printf("%c",bomb);
+        printf("%s",color_array[0]);
         continue; 
       }
       if(board.tiles[j][i].flag){
