@@ -31,7 +31,7 @@ u [x coordinate] [y coordinate]
 ```
 will un-flag the tile on position (x,y) if there's already a flag on said tile 
 ## Example gameplay 
-```bash 
+```
 clisweeper beginner
     1 2 3 4 5 6 7 8 9 10
    +-------------------+
