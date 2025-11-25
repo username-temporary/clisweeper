@@ -8,6 +8,15 @@ clone the repository using the following command
 
 ```bash
 git clone https://github.com/username-temporary/clisweeper
+cd clisweeper
+make install
+```
+## uninstall
+while in the directory where the repository was cloned 
+```bash
+make uninstall
+cd ..
+rm -rf clisweeper 
 ```
 
 ## Usage
