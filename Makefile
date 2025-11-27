@@ -2,7 +2,7 @@
 ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 #install and uninstall
 install: game
-	sudo ln -s $(ROOT_DIR)/game /usr/bin/clisweeper
+	sudo cp $(ROOT_DIR)/game /usr/bin/clisweeper
 uninstall:
 	sudo rm /usr/bin/clisweeper
 
