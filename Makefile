@@ -24,22 +24,24 @@ tests: board_test
 clean : 
 	rm *.o board_test game
 #object files: 
-	#src
-board.o:src/board.c
+
+board.o:src/board.c include/board.h
 	gcc -c src/board.c
 	
-board_print.o:src/board_print.c
-	gcc -c src/board_print.c
+board_print.o:src/board_print.c include/board_print.h include/board.h
+	gcc -c src/board_print.c -lncurses
 
-commands.o: src/commands.c
+commands.o: src/commands.c include/commands.h 
 	gcc -c src/commands.c
 
-game.o:src/game.c
-	gcc -c src/game.c
+game.o:src/game.c include/board.h include/board_print.h include/commands.h
+	gcc -c src/game.c -lncurses
 	#test
-board_test.o:tests/board_test.c
+board_test.o:tests/board_test.c include/board_print.h 
 	gcc -c tests/board_test.c
 
+
+	#src
 #executable
 game: game.o board.o board_print.o commands.o
 	gcc -o game game.o board.o board_print.o commands.o
